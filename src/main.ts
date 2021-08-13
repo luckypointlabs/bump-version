@@ -45,7 +45,7 @@ async function run() {
     }
     versionjson["version"] = newVersion
     console.log('writing new version file')
-    fs.writeFileSync(versionPath, versionjson, 'utf8')
+    fs.writeFileSync(versionPath, JSON.stringify(versionjson), 'utf8')
     let linesReplaced: LineReplaced[] = []
     if (prefix) {
         console.log(`replacing version patterns below [bump if ${prefix}]`)
