@@ -27,12 +27,13 @@ async function run() {
         process.env.BRANCH ||
         GITHUB_REF.split('/').reverse()[0] ||
         'master'
-    const versionPath = core.getInput('version_file') || 'VERSION'
+    const versionPath = core.getInput('version_file') || 'version.json'
     if (!fs.existsSync(versionPath)) {
         fs.writeFileSync(versionPath, '0.0.0', 'utf8')
     }
     const prefix = (core.getInput('prefix') || '').trim()
-    const version = fs.readFileSync(versionPath, 'utf8').toString().trim()
+    var versionjson = JSON.parse(fs.readFileSync(versionPath, 'utf8'))
+    const version = versionjson["version"]
     const preReleaseTag = core.getInput('prerelease_tag') || ''
     const newVersion = inc(
         version,
@@ -42,8 +43,9 @@ async function run() {
     if (!newVersion) {
         throw new Error('could not bump version ' + version)
     }
+    versionjson["version"] = newVersion
     console.log('writing new version file')
-    fs.writeFileSync(versionPath, newVersion, 'utf8')
+    fs.writeFileSync(versionPath, versionjson, 'utf8')
     let linesReplaced: LineReplaced[] = []
     if (prefix) {
         console.log(`replacing version patterns below [bump if ${prefix}]`)
