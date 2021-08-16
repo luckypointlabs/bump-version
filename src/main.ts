@@ -13,6 +13,8 @@ import { inc } from 'semver'
 import { createAnnotations } from './createAnnotation'
 
 async function run() {
+    
+
     const githubToken =
         core.getInput('github_token') || process.env.GITHUB_TOKEN
     const ignore =
@@ -33,12 +35,15 @@ async function run() {
     }
     const prefix = (core.getInput('prefix') || '').trim()
     var versionjson = JSON.parse(fs.readFileSync(versionPath, 'utf8'))
-    const version = versionjson["version"]
-    const preReleaseTag = core.getInput('prerelease_tag') || ''
+    const version = versionjson["version"]    
+    const incrementType = core.getInput('increment_type') || 'patch'    
+    //TODO is there a better way to enforce correct increment type?
     const newVersion = inc(
         version,
-        preReleaseTag ? 'prerelease' : 'patch',
-        preReleaseTag ?? undefined,
+        incrementType=='major' ? 'major' :
+        incrementType=='minor' ? 'minor' : 
+        incrementType=='prerelease' ? 'prerelease' : 'patch',
+        incrementType=='prerelease' ? 'prerelease' : ''
     )
     if (!newVersion) {
         throw new Error('could not bump version ' + version)
