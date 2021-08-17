@@ -49,7 +49,7 @@ async function run() {
 
     //Since its JSON we need to grab out the version variable. 
     const version = versionjson["version"]    
-
+    console.log('old version is:' + version)
     //Determin our increment type, then use the inc function from the semver package to increment correctly.
     const incrementType = core.getInput('increment_type') || 'patch'    
     //TODO is there a better way to enforce correct increment type?
