@@ -67,7 +67,7 @@ async function run() {
     //Set our version to our new version and write the file back out to the file location
     versionjson["version"] = newVersion
     console.log('writing new version file')
-    fs.writeFileSync(versionPath, JSON.stringify(versionjson), 'utf8')
+    fs.writeFileSync(versionPath, JSON.stringify(versionjson, null, 2), 'utf8')
 
     //Look through files and replace version in lines after [bump] with the new version
     let linesReplaced: LineReplaced[] = []
