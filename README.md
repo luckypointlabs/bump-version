@@ -50,7 +50,6 @@ After the first prerelease `bump-version` will increase the tag version: `1.0.1-
       version_file: ./VERSION
       prerelease_tag: alpha
       github_token: ${{ secrets.GITHUB_TOKEN }}
-      ignore: dist, ignored_folder
 ```
 
 ## Created annotations

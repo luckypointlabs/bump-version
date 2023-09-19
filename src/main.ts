@@ -4,9 +4,7 @@ import commit from './commit'
 import { createTag } from './createTag'
 import {
     capitalize,
-    replacePattern,
     LineReplaced,
-    versionRegex,
 } from './support'
 import { inc } from 'semver'
 
@@ -18,12 +16,6 @@ async function run() {
     //Read our Github Token
     const githubToken =
         core.getInput('github_token') || process.env.GITHUB_TOKEN
-    const ignore =
-        core
-            .getInput('ignore')
-            .split(',')
-            .map((x) => x.trim())
-            .filter(Boolean) || []
 
     //Get our Github Ref and Branch
     const GITHUB_REF = process.env.GITHUB_REF || ''
