@@ -69,29 +69,6 @@ async function run() {
     console.log('writing new version file')
     fs.writeFileSync(versionPath, JSON.stringify(versionjson, null, 2), 'utf8')
 
-    //Look through files and replace version in lines after [bump] with the new version
-    let linesReplaced: LineReplaced[] = []
-    if (prefix) {
-        console.log(`replacing version patterns below [bump if ${prefix}]`)
-        const pattern = new RegExp('\\[bump if ' + prefix + '\\]')
-        const res = await replacePattern({
-            pattern,
-            replacer: versionRegex,
-            value: newVersion,
-            ignore,
-        })
-        linesReplaced = res.linesReplaced
-    } else {
-        console.log(`replacing version patterns below [bump]`)
-        const res = await replacePattern({
-            pattern: /\[bump\]/,
-            replacer: versionRegex,
-            value: newVersion,
-            ignore,
-        })
-        linesReplaced = res.linesReplaced
-    }
-
     //Grab a prefix tag if necessary.  for go we will often prefix tags with v since it uses that for modules.
     const prefixTag = core.getInput('prefix_tag') || ''
     const tagName = prefix ? prefixTag + prefix + '_' + newVersion : prefixTag + newVersion
@@ -120,7 +97,7 @@ async function run() {
     }
 
     console.log('setting output version=' + newVersion + ' prefix=' + prefix)
-    await createAnnotations({ githubToken, newVersion: tagMsg, linesReplaced })
+    await createAnnotations({ githubToken, newVersion: tagMsg })
     core.setOutput('version', newVersion)
     core.setOutput('prefix', prefix)
     core.info(`new version ${tagMsg}`)
